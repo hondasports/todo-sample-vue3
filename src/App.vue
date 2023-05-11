@@ -65,27 +65,33 @@ const isEmptyTodos = computed(() => {
 //    * tailwindの使い方を。
 
 <template>
-  <div>TODOリスト</div>
-  <div v-if="isEmptyTodos">
-    タスクがない。
-  </div>
-  <ul v-else>
-    <li v-for="(todo, index) in todos" :key="index">
-      <div class="todo-container">
-        <input type="checkbox" v-model="todos[index].completed">
-        <span class="todo-item">
-          <span @click="enableTodoView(index)">
-            <input type="text" v-model="todos[index].message" :disabled="! todoViewState[index].isEditable">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">TODOリスト</h1>
+    <div v-if="isEmptyTodos" class="text-center py-6">
+      タスクがない。
+    </div>
+    <ul v-else>
+      <li v-for="(todo, index) in todos" :key="index" class="mb-4">
+        <div class="flex items-center space-x-4">
+          <input type="checkbox" v-model="todos[index].completed" class="rounded">
+          <span class="flex-1" @click="enableTodoView(index)">
+            <input type="text"
+              class="w-full px-4 py-2 rounded border border-gray-300"
+              :class="{ 'line-through': todos[index].completed }"
+              v-model="todos[index].message"
+              :disabled="! todoViewState[index].isEditable" >
           </span>
-          <button @click="deleteTodo(index)">削除</button>
-          <button v-if="todoViewState[index].isEditable" @click="disableTodoView(index)">確定</button>
-          <span>{{ todos[index].completed ? '完了済み' : '' }}</span>
-        </span>
-      </div>
-    </li>
-  </ul>
-  <div class="operation-container">
-    新規タスク: <input type="text" v-model="taskContent"><button @click="addTodo" :disabled="! taskContent.length">追加</button>
+          <button @click="deleteTodo(index)" class="px-4 py-2 bg-red-500 text-white rounded">削除</button>
+          <button v-if="todoViewState[index].isEditable" @click="disableTodoView(index)" class="px-4 py-2 bg-green-500 text-white rounded">確定</button>
+          <span>{{ todos[index].completed ? '完了' : '' }}</span>
+        </div>
+      </li>
+    </ul>
+    <div class="flex items-center space-x-4">
+      <label for="task-input" class="text-gray-700">新規タスク:</label>
+      <input id="task-input" type="text" v-model="taskContent" class="flex-1 px-4 py-2 rounded border border-gray-300">
+      <button @click="addTodo" :disabled="! taskContent.length" class="px-4 py-2 bg-blue-500 text-white rounded">追加</button>
+    </div>
   </div>
 </template>
 
